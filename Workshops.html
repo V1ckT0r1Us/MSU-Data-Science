@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>💻 MSU Data Science Club - Workshops 🎓</title>
+    <style>
+        :root {
+            --msu-blue: #98E6EE;
+            --msu-gold: #D7BD19;
+            --msu-dark: #1a365d;
+            --data-purple: #7C3AED;
+            --data-green: #10B981;
+            --code-blue: #3B82F6;
+            --accent-orange: #F59E0B;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--msu-blue) 0%, #e0f7fa 50%, #f3f4f6 100%);
+            color: var(--msu-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--msu-blue), var(--msu-gold));
+            color: var(--msu-dark);
+            padding: 15px 20px;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1001;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        header h1 { font-size: 1.8em; margin: 0; font-weight: 700; }
+        header p { font-size: 0.9em; margin: 0; opacity: 0.9; }
+        
+        .main-nav {
+            background: rgba(255,255,255,0.95);
+            padding: 12px 0;
+            position: sticky;
+            top: 80px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .main-nav a {
+            display: inline-block;
+            margin: 0 8px;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, var(--data-purple), var(--data-green));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(124,58,237,0.3);
+        }
+        .main-nav a:hover, .main-nav a.active {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(124,58,237,0.5);
+        }
+        
+        .page-container {
+            margin-top: 120px;
+            padding: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* WORKSHOP HERO */
+        .workshop-hero {
+            background: linear-gradient(135deg, var(--code-blue), var(--data-purple));
+            color: white;
+            padding: 100px 40px;
+            text-align: center;
+            border-radius: 30px;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        .workshop-hero::before {
+            content: '💻🔬';
+            position: absolute;
+            font-size: 12em;
+            top: -60px;
+            left: -60px;
+            opacity: 0.08;
+            animation: rotate3D 20s linear infinite;
+        }
+        @keyframes rotate3D {
+            from { transform: rotateY(0deg) rotateX(0deg); }
+            to { transform: rotateY(360deg) rotateX(360deg); }
+        }
+        .workshop-hero h1 {
+            font-size: clamp(3em, 7vw, 5em);
+            margin-bottom: 25px;
+            font-weight: 900;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .workshop-hero p {
+            font-size: 1.5em;
+            max-width: 900px;
+            margin: 0 auto 30px;
+            opacity: 0.95;
+        }
+        
+        /* SKILL TABS */
+        .skill-tabs {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1em;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+        .tab-btn:hover, .tab-btn.active {
+            background: white;
+            color: var(--code-blue);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        /* WORKSHOP GRID */
+        .workshops-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        /* WORKSHOP CARD */
+        .workshop-card {
+            background: rgba(255,255,255,0.97);
+            border-radius: 25px;
+            padding: 45px 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            border-top: 8px solid var(--accent-orange);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+            cursor: pointer;
+        }
+        .workshop-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--msu-gold), var(--accent-orange), var(--data-green));
+            transform: scaleX(0);
+            transition: transform 0.6s ease;
+        }
+        .workshop-card:hover::before {
+            transform: scaleX(1);
+        }
+        .workshop-card:hover {
+            transform: translateY(-20px);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.2);
+        }
+        
+        .workshop-icon {
+            font-size: 4.5em;
+            margin-bottom: 25px;
+            display: block;
+            filter: drop-shadow(0 8px 20px rgba(59,130,246,0.3));
+            transition: all 0.4s ease;
+        }
+        .workshop-card:hover .workshop-icon {
+            transform: scale(1.2) rotate(15deg);
+        }
+        
+        .workshop-level {
+            display: inline-block;
+            background: var(--code-blue);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 800;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 20px rgba(59,130,246,0.3);
+        }
+        
+        .workshop-title {
+            font-size: 2.3em;
+            font-weight: 900;
+            color: var(--msu-dark);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .workshop-tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .tech-tag {
+            background: linear-gradient(45deg, var(--data-purple), var(--data-green));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 700;
+        }
+        
+        .workshop-schedule {
+            background: rgba(245,158,11,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--accent-orange);
+        }
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .workshop-cta {
+            width: 100%;
+            background: linear-gradient(45deg, var(--code-blue), var(--data-purple));
+            color: white;
+            border: none;
+            padding: 22px 40px;
+            border-radius: 20px;
+            font-size: 1.4em;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 12px 35px rgba(59,130,246,0.4);
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .workshop-cta:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(59,130,246,0.6);
+        }
+        
+        /* PROGRESS BAR */
+        .skill-progress {
+            margin-top: 40px;
+            padding: 40px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        .progress-item {
+            margin-bottom: 30px;
+        }
+        .progress-label {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .progress-bar {
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--data-green), var(--code-blue));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 2s ease;
+            position: relative;
+        }
+        .progress-fill::after {
+            content: attr(data-percent);
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-weight: 700;
+            font-size: 0.85em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .page-container { padding: 20px; margin-top: 110px; }
+            .main-nav a { display: block; margin: 6px 0; }
+            .workshops-grid { grid-template-columns: 1fr; }
+            .workshop-hero { padding: 70px 25px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>💻 MSU Data Science Workshops</h1>
+        <p>Midlands State University Gweru | Hands-on Skill Building 🚀</p>
+    </header>
+
+    <nav class="main-nav">
+        <a href="Workshps.html" onclick="showPage('workshops')" class="active">💻 All Workshops</a>
+        <a href="Events.html" onclick="showPage('events')">📅 Events</a>
+        <a href="Home.html" onclick="showPage('home')">🏠 Home</a>
+        <a href="Projects.html" onclick="showPage('projects')">📊 Projects</a>
+    </nav>
+
+    <div class="page-container">
+        <!-- WORKSHOP HERO -->
+        <section class="workshop-hero">
+            <h1>Master Data Science Skills</h1>
+            <p>Weekly hands-on workshops • Real projects • Industry tools • Career-ready skills</p>
+        </section>
+
+        <!-- SKILL TABS -->
+        <div class="skill-tabs">
+            <button class="tab-btn active" data-tab="all">All Skills</button>
+            <button class="tab-btn" data-tab="python">Python</button>
+            <button class="tab-btn" data-tab="viz">Data Viz</button>
+            <button class="tab-btn" data-tab="ml">Machine Learning</button>
+            <button class="tab-btn" data-tab="cloud">Cloud</button>
+        </div>
+
+        <!-- WORKSHOPS GRID -->
+        <div class="workshops-grid">
+            <div class="workshop-card" data-skills="python,viz">
+                <span class="workshop-icon">🐍</span>
+                <span class="workshop-level">Weekly • Beginner-Friendly</span>
+                <h2 class="workshop-title">Power BI Dashboards</h2>
+                <div class="workshop-tech-stack">
+                    <span class="tech-tag">Power BI</span>
+                    <span class="tech-tag">DAX</span>
+                    <span class="tech-tag">SQL</span>
+                    <span class="tech-tag">Zimbabwe Data</span>
+                </div>
+                <div class="workshop-schedule">
+                    <div class="schedule-item"><strong>📅 Every Thursday</strong> <span>4:00 PM - 6:00 PM</span></div>
+                    <div class="schedule-item"><strong>🖥️ Location:</strong> <span>MSU Lab 204</span></div>
+                    <div class="schedule-item"><strong>💻 Tools:</strong> <span>Power BI Desktop (Free)</span></div>
+                </div>
+                <button class="workshop-cta" onclick="joinWorkshop('Power BI')">🚀 JOIN WORKSHOP</button>
+            </div>
+
+            <div class="workshop-card" data-skills="python,ml">
+                <span class="workshop-icon">⚙️</span>
+                <span class="workshop-level">Bi-weekly • Intermediate</span>
+                <h2 class="workshop-title">Advanced Python</h2>
+                <div class="workshop-tech-stack">
+                    <span class="tech-tag">Web Scraping</span>
+                    <span class="tech-tag">APIs</span>
+                    <span class="tech-tag">Pandas</span>
+                    <span class="tech-tag">Automation</span>
+                </div>
+                <div class="workshop-schedule">
+                    <div class="schedule-item"><strong>📅 Every 2nd Saturday</strong> <span>9:00 AM - 12:00 PM</span></div>
+                    <div class="schedule-item"><strong>💾 Datasets:</strong> <span>Zimbabwe Economic Data</span></div>
+                </div>
+                <button class="workshop-cta" onclick="joinWorkshop('Advanced Python')">🔥 LEVEL UP</button>
+            </div>
+
+            <div class="workshop-card" data-skills="ml,cloud">
+                <span class="workshop-icon">🧠</span>
+                <span class="workshop-level">Monthly • Advanced</span>
+                <h2 class="workshop-title">TensorFlow Basics</h2>
+                <div class="workshop-tech-stack">
+                    <span class="tech-tag">TensorFlow</span>
+                    <span class="tech-tag">Google Colab</span>
+                    <span class="tech-tag">Neural Networks</span>
+                    <span class="tech-tag">GPU Free</span>
+                </div>
+                <div class="workshop-schedule">
+                    <div class="schedule-item"><strong>📅 1st Friday Monthly</strong> <span>2:00 PM - 5:00 PM</span></div>
+                    <div class="schedule-item"><strong>☁️ Platform:</strong> <span>Google Colab Pro</span></div>
+                </div>
+                <button class="workshop-cta" onclick="joinWorkshop('TensorFlow')">🧮 GO DEEP</button>
+            </div>
+        </div>
+
+        <!-- SKILL PROGRESS TRACKER -->
+        <div class="skill-progress">
+            <h3 style="text-align: center; font-size: 2.5em; margin-bottom: 40px; color: var(--msu-dark);">Your Learning Progress</h3>
+            <div class="progress-item">
+                <div class="progress-label">
+                    <span>Python Mastery</span>
+                    <span>85%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" data-percent="85%"></div>
+                </div>
+            </div>
+            <div class="progress-item">
+                <div class="progress-label">
+                    <span>Data Visualization</span>
+                    <span>70%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" data-percent="70%"></div>
+                </div>
+            </div>
+            <div class="progress-item">
+                <div class="progress-label">
+                    <span>Machine Learning</span>
+                    <span>45%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" data-percent="45%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TAB FILTERING
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const tab = btn.dataset.tab;
+                document.querySelectorAll('.workshop-card').forEach(card => {
+                    if (tab === 'all' || card.dataset.skills.includes(tab)) {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    } else {
+                        card.style.opacity = '0.3';
+                        card.style.transform = 'translateY(20px)';
+                    }
+                });
+            });
+        });
+        
+        // ANIMATED PROGRESS BARS
+        document.querySelectorAll('.progress-fill').forEach(bar => {
+            setTimeout(() => {
+                bar.style.width = bar.dataset.percent;
+            }, 500);
+        });
+        
+        function joinWorkshop(workshopName) {
+            const btn = event.target;
+            const originalText = btn.textContent;
+            
+            btn.textContent = '🎉 JOINING...';
+            btn.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                btn.innerHTML = '✅ <strong>REGISTERED!</strong>';
+                btn.style.background = 'linear-gradient(45deg, #10B981, #34D399)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                    btn.style.transform = '';
+                }, 2500);
+                
+                alert(`🎓 SUCCESS! You've joined "${workshopName}"!\n\n📧 Check your email/WhatsApp for materials & schedule!\n\nMSU Data Science Club 🚀`);
+            }, 1200);
+        }
+        
+        // HOVER SOUND EFFECT (optional)
+        document.querySelectorAll('.workshop-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.animation = 'none';
+                card.offsetHeight; // Trigger reflow
+                card.style.animation = 'pulseGlow 0.6s ease';
+            });
+        });
+    </script>
+</body>
+</html>

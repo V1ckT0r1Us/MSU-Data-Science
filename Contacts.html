@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>📧 MSU Data Science Club - Contact 🚀</title>
+    <style>
+        :root {
+            --msu-blue: #98E6EE;
+            --msu-gold: #D7BD19;
+            --msu-dark: #1a365d;
+            --data-purple: #7C3AED;
+            --data-green: #10B981;
+            --contact-teal: #14B8A6;
+            --form-blue: #0EA5E9;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--msu-blue) 0%, #e0f7fa 50%, #f3f4f6 100%);
+            color: var(--msu-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--msu-blue), var(--msu-gold));
+            color: var(--msu-dark);
+            padding: 15px 20px;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1001;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            animation: slideDown 0.6s ease;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        header h1 { font-size: 1.8em; margin: 0; font-weight: 700; }
+        header p { font-size: 0.9em; margin: 0; opacity: 0.9; }
+        
+        .main-nav {
+            background: rgba(255,255,255,0.95);
+            padding: 12px 0;
+            position: sticky;
+            top: 80px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .main-nav a {
+            display: inline-block;
+            margin: 0 8px;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, var(--data-purple), var(--data-green));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 15px rgba(124,58,237,0.3);
+        }
+        .main-nav a:hover, .main-nav a.active {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(124,58,237,0.5);
+        }
+        
+        .page-container {
+            margin-top: 140px;
+            padding: 40px 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* CONTACT HERO */
+        .contact-hero {
+            background: linear-gradient(135deg, var(--contact-teal), var(--data-purple));
+            color: white;
+            padding: 100px 50px;
+            text-align: center;
+            border-radius: 35px;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(20,184,166,0.3);
+        }
+        .contact-hero::before {
+            content: '📧💻🎯';
+            position: absolute;
+            font-size: 15em;
+            top: -60px;
+            right: -80px;
+            opacity: 0.08;
+            animation: floatContact 6s ease-in-out infinite;
+        }
+        @keyframes floatContact {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(5deg); }
+            66% { transform: translateY(-10px) rotate(-3deg); }
+        }
+        .contact-hero h1 {
+            font-size: clamp(3em, 8vw, 5.5em);
+            margin-bottom: 25px;
+            font-weight: 900;
+            text-shadow: 0 6px 25px rgba(0,0,0,0.3);
+        }
+        .contact-hero p {
+            font-size: 1.6em;
+            max-width: 900px;
+            margin: 0 auto 30px;
+            opacity: 0.95;
+        }
+        
+        /* CONTACT CARDS GRID */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+        
+        .contact-card {
+            background: rgba(255,255,255,0.97);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.12);
+            border-top: 8px solid var(--contact-teal);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+            cursor: pointer;
+            text-align: center;
+        }
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--msu-gold), var(--data-purple), var(--contact-teal));
+            transform: scaleX(0);
+            transition: transform 0.8s ease;
+        }
+        .contact-card:hover::before {
+            transform: scaleX(1);
+        }
+        .contact-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            box-shadow: 0 45px 100px rgba(20,184,166,0.25);
+        }
+        
+        .contact-icon {
+            font-size: 5em;
+            margin-bottom: 25px;
+            display: block;
+            filter: drop-shadow(0 10px 25px rgba(20,184,166,0.3));
+            transition: all 0.4s ease;
+        }
+        .contact-card:hover .contact-icon {
+            transform: scale(1.2) rotateY(360deg);
+        }
+        
+        .contact-title {
+            font-size: 2.2em;
+            font-weight: 900;
+            color: var(--msu-dark);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .contact-detail {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--data-purple);
+            margin-bottom: 15px;
+            word-break: break-all;
+        }
+        
+        .contact-hours {
+            background: rgba(20,184,166,0.1);
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 25px;
+            border-left: 5px solid var(--contact-teal);
+        }
+        
+        /* MAIN CONTACT FORM */
+        .contact-form-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 35px;
+            padding: 60px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            overflow: hidden;
+        }
+        .contact-form-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 35px;
+            padding: 3px;
+            background: linear-gradient(45deg, var(--msu-blue), var(--msu-gold), var(--data-purple), var(--contact-teal));
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            animation: borderRotate 8s linear infinite;
+        }
+        @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .form-header h2 {
+            font-size: 3em;
+            font-weight: 900;
+            color: var(--msu-dark);
+            margin-bottom: 20px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .form-group {
+            position: relative;
+            margin-bottom: 35px;
+        }
+        .form-group label {
+            position: absolute;
+            top: 18px; left: 20px;
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--data-purple);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .form-group input:focus + label,
+        .form-group textarea:focus + label,
+        .form-group input:valid + label,
+        .form-group textarea:valid + label {
+            top: -10px;
+            left: 15px;
+            font-size: 0.85em;
+            background: white;
+            padding: 0 8px;
+            border-radius: 8px;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 25px 20px 10px;
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 1.1em;
+            background: white;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--form-blue);
+            box-shadow: 0 0 0 4px rgba(14,165,233,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(45deg, var(--data-green), var(--contact-teal));
+            color: white;
+            border: none;
+            padding: 25px 60px;
+            border-radius: 30px;
+            font-size: 1.6em;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 20px 50px rgba(16,185,129,0.4);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .submit-btn:active::before {
+            width: 400px; height: 400px;
+        }
+        .submit-btn:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(16,185,129,0.6);
+        }
+        
+        /* SOCIAL PROOF */
+        .social-proof {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+        .social-item {
+            text-align: center;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        .social-item:hover {
+            opacity: 1;
+            transform: translateY(-5px);
+        }
+        .social-icon {
+            font-size: 2.5em;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .page-container { padding: 20px; margin-top: 120px; }
+            .main-nav a { display: block; margin: 6px 0; }
+            .form-grid { grid-template-columns: 1fr; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .contact-hero { padding: 70px 25px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📧 MSU Data Science Club</h1>
+        <p>Midlands State University Gweru | Get Connected 🚀</p>
+    </header>
+
+    <nav class="main-nav">
+        <a href="Projects.html" onclick="showPage('projects')">📊 Projects</a>
+        <a href="Workshops.html" onclick="showPage('workshops')">💻 Workshops</a>
+        <a href="Events.html" onclick="showPage('events')">📅 Events</a>
+        <a href="Home.html" onclick="showPage('home')">🏠 Home</a>
+    </nav>
+
+    <div class="page-container">
+        <!-- CONTACT HERO -->
+        <section class="contact-hero">
+            <h1>Let's Connect!</h1>
+            <p>RSVP for events • Join workshops • Collaborate on projects • Career opportunities</p>
+        </section>
+
+        <!-- CONTACT INFO CARDS -->
+        <div class="contact-grid">
+            <div class="contact-card">
+                <span class="contact-icon">👤</span>
+                <h3 class="contact-title">Event Coordinator</h3>
+                <div class="contact-detail">Victor Chigumbu</div>
+                <div class="contact-detail">+263 77 123 4567</div>
+                <div class="contact-detail">victor@datascience.msu.ac.zw</div>
+                <div class="contact-hours">
+                    <strong>📱 Available:</strong> Mon-Fri 9AM-7PM<br>
+                    <strong>🎮 Gaming Nights:</strong> Victor leads!
+                </div>
+            </div>
+
+            <div class="contact-card">
+                <span class="contact-icon">📧</span>
+                <h3 class="contact-title">Club Email</h3>
+                <div class="contact-detail">datascience@msu.ac.zw</div>
+                <div class="contact-detail">MSU Computer Science Dept</div>
+                <div class="contact-detail">Room 204, Senga Road</div>
+                <div class="contact-hours">
+                    <strong>📍 Location:</strong> MSU Gweru Campus<br>
+                    <strong>🕒 Response:</strong> Within 24 hours
+                </div>
+            </div>
+
+            <div class="contact-card">
+                <span class="contact-icon">💬</span>
+                <h3 class="contact-title">WhatsApp Group</h3>
+                <div class="contact-detail">+263 77 123 4567</div>
+                <div class="contact-detail">Join 150+ members</div>
+                <div class="contact-detail">Event updates • Code sharing</div>
+                <div class="contact-hours">
+                    <strong>🚀 Quick RSVP:</strong> Text event name<br>
+                    <strong>💻 Materials:</strong> Shared instantly
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTACT FORM -->
+        <div class="contact-form-section">
+            <div class="form-header">
+                <h2>Send Message</h2>
+                <p>RSVP • Questions • Project collaboration • Career advice</p>
+            </div>
+            
+            <form id="contactForm" onsubmit="sendMessage(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" required>
+                        <label for="name">👤 Full Name</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" required>
+                        <label for="email">📧 Email Address</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="phone" name="phone">
+                        <label for="phone">📱 WhatsApp Number</label>
+                    </div>
+                    <div class="form-group">
+                        <select id="interest" name="interest" required>
+                            <option value="">🎯 Select Interest</option>
+                            <option value="python-bootcamp">Python Bootcamp</option>
+                            <option value="ml-crash-course">ML Crash Course</option>
+                            <option value="gaming-night">Gaming Night</option>
+                            <option value="power-bi">Power BI Workshop</option>
+                            <option value="projects">Project Collaboration</option>
+                            <option value="career">Career Advice</option>
+                        </select>
+                        <label for="interest">Event Interest</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <textarea id="message" name="message" rows="6" required 
+                        placeholder="Tell us about your data science journey..."></textarea>
+                    <label for="message">💬 Your Message</label>
+                </div>
+                
+                <button type="submit" class="submit-btn">🚀 Send Message</button>
+            </form>
+        </div>
+
+        <!-- SOCIAL PROOF -->
+        <div class="social-proof">
+            <div class="social-item">
+                <span class="social-icon">📈</span>
+                <strong>150+</strong> Active Members
+            </div>
+            <div class="social-item">
+                <span class="social-icon">🎯</span>
+                <strong>98%</strong> Event Attendance
+            </div>
+            <div class="social-item">
+                <span class="social-icon">🚀</span>
+                <strong>24hr</strong> Response Time
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('contactForm');
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            
+            // Loading animation
+            submitBtn.innerHTML = '📤 Sending...';
+            submitBtn.style.transform = 'scale(0.95)';
+            
+            // Simulate API call
+            setTimeout(() => {
+                const formData = new FormData(form);
+                const name = formData.get('name');
+                
+                submitBtn.innerHTML = '✅ <strong>SENT!</strong>';
+                submitBtn.style.background = 'linear-gradient(45deg, #10B981, #34D399)';
+                
+                // Success message
+                setTimeout(() => {
+                    alert(`🎉 Message received from ${name}!\n\n📱 Victor will reply within 24hrs on WhatsApp\n📧 & Email confirmation sent!\n\nMSU Data Science Club 🚀`);
+                    form.reset();
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.background = '';
+                    submitBtn.style.transform = '';
+                }, 2000);
+            }, 1500);
+        }
+        
+        // Floating animation for contact cards
+        document.querySelectorAll('.contact-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.2}s`;
+            card.style.animation = 'slideInUp 0.8s ease-out forwards';
+        });
+        
+        // Form focus animations
+        document.querySelectorAll('.form-group input, .form-group textarea, .form-group select').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.style.transform = 'scale(1.02)';
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

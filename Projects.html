@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>📊 MSU Data Science Club - Projects 🚀</title>
+    <style>
+        :root {
+            --msu-blue: #98E6EE;
+            --msu-gold: #D7BD19;
+            --msu-dark: #1a365d;
+            --data-purple: #7C3AED;
+            --data-green: #10B981;
+            --chart-blue: #3B82F6;
+            --model-orange: #F97316;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--msu-blue) 0%, #e0f7fa 50%, #f3f4f6 100%);
+            color: var(--msu-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--msu-blue), var(--msu-gold));
+            color: var(--msu-dark);
+            padding: 15px 20px;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1001;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        header h1 { font-size: 1.8em; margin: 0; font-weight: 700; }
+        header p { font-size: 0.9em; margin: 0; opacity: 0.9; }
+        
+        .main-nav {
+            background: rgba(255,255,255,0.95);
+            padding: 12px 0;
+            position: sticky;
+            top: 80px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .main-nav a {
+            display: inline-block;
+            margin: 0 8px;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, var(--data-purple), var(--data-green));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(124,58,237,0.3);
+        }
+        .main-nav a:hover, .main-nav a.active {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(124,58,237,0.5);
+        }
+        
+        .page-container {
+            margin-top: 120px;
+            padding: 30px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* PROJECTS HERO */
+        .projects-hero {
+            background: linear-gradient(135deg, var(--chart-blue), var(--model-orange));
+            color: white;
+            padding: 100px 50px;
+            text-align: center;
+            border-radius: 35px;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .projects-hero::before {
+            content: '📈🧠💹';
+            position: absolute;
+            font-size: 14em;
+            top: -40px;
+            right: -80px;
+            opacity: 0.1;
+            animation: pulse3D 6s ease-in-out infinite;
+        }
+        @keyframes pulse3D {
+            0%, 100% { transform: scale(1) rotateY(0deg); }
+            50% { transform: scale(1.1) rotateY(180deg); }
+        }
+        .projects-hero h1 {
+            font-size: clamp(3.5em, 8vw, 6em);
+            margin-bottom: 25px;
+            font-weight: 900;
+            text-shadow: 0 6px 30px rgba(0,0,0,0.3);
+        }
+        .projects-hero p {
+            font-size: 1.6em;
+            max-width: 1000px;
+            margin: 0 auto 35px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 25px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+        }
+        .stat-number {
+            font-size: 3em;
+            font-weight: 900;
+            color: var(--msu-gold);
+            display: block;
+        }
+        
+        /* PROJECT FILTERS */
+        .project-filters {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 15px 35px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 1.1em;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: white;
+            color: var(--chart-blue);
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        
+        /* PROJECTS MASONRY GRID */
+        .projects-masonry {
+            column-count: 1;
+            column-gap: 40px;
+            column-fill: auto;
+        }
+        @media (min-width: 768px) {
+            .projects-masonry { column-count: 2; }
+        }
+        @media (min-width: 1200px) {
+            .projects-masonry { column-count: 3; }
+        }
+        
+        /* PROJECT CARD */
+        .project-card {
+            background: rgba(255,255,255,0.98);
+            border-radius: 30px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.15);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+            break-inside: avoid;
+            position: relative;
+            cursor: pointer;
+        }
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--msu-gold), var(--data-purple), var(--data-green), var(--chart-blue));
+            transform: scaleX(0);
+            transition: transform 0.8s ease;
+        }
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+        .project-card:hover {
+            transform: translateY(-25px) scale(1.02);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.25);
+        }
+        
+        .project-header {
+            background: linear-gradient(135deg, var(--data-purple), var(--chart-blue));
+            color: white;
+            padding: 40px 35px;
+            position: relative;
+            overflow: hidden;
+        }
+        .project-header::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.8s ease;
+        }
+        .project-card:hover .project-header::after {
+            left: 100%;
+        }
+        .project-type {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 0.95em;
+            font-weight: 800;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .project-title {
+            font-size: 2.4em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        .project-metrics {
+            display: flex;
+            gap: 25px;
+            font-size: 1.1em;
+        }
+        .metric {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .project-content {
+            padding: 40px 35px;
+        }
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .tech-badge {
+            background: linear-gradient(45deg, var(--data-green), var(--model-orange));
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(16,185,129,0.3);
+        }
+        
+        .project-impact {
+            background: rgba(249,115,22,0.08);
+            padding: 25px;
+            border-radius: 20px;
+            border-left: 6px solid var(--model-orange);
+            margin-bottom: 30px;
+        }
+        .impact-stat {
+            display: inline-block;
+            background: var(--model-orange);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 800;
+            font-size: 1.2em;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .project-cta {
+            width: 100%;
+            background: linear-gradient(45deg, var(--chart-blue), var(--data-purple));
+            color: white;
+            border: none;
+            padding: 22px 40px;
+            border-radius: 20px;
+            font-size: 1.3em;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 15px 40px rgba(59,130,246,0.4);
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .project-cta:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 60px rgba(59,130,246,0.6);
+        }
+        
+        @media (max-width: 768px) {
+            .page-container { padding: 20px; margin-top: 110px; }
+            .main-nav a { display: block; margin: 6px 0; }
+            .projects-masonry { column-count: 1; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📊 MSU Data Science Projects</h1>
+        <p>Midlands State University Gweru | Real Impact 🚀</p>
+    </header>
+
+    <nav class="main-nav">
+        <a href="Projects.html" onclick="showPage('projects')" class="active">📊 All Projects</a>
+        <a href="Workshops.html" onclick="showPage('workshops')">💻 Workshops</a>
+        <a href="Events.html" onclick="showPage('events')">📅 Events</a>
+        <a href="Home.html" onclick="showPage('home')">🏠 Home</a>
+    </nav>
+
+    <div class="page-container">
+        <!-- PROJECTS HERO -->
+        <section class="projects-hero">
+            <h1>Live Student Projects</h1>
+            <p>Real Zimbabwe datasets • Industry-grade models • Live dashboards • Portfolio-ready</p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">12</span>
+                    Active Projects
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">250+</span>
+                    GitHub Stars
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">85%</span>
+                    Industry Adoption
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    Job Placement
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECT FILTERS -->
+        <div class="project-filters">
+            <button class="filter-btn active" data-filter="all">All Projects</button>
+            <button class="filter-btn" data-filter="forecasting">Forecasting</button>
+            <button class="filter-btn" data-filter="classification">Classification</button>
+            <button class="filter-btn" data-filter="gaming">Gaming</button>
+            <button class="filter-btn" data-filter="economics">Economics</button>
+        </div>
+
+        <!-- PROJECTS MASONRY -->
+        <div class="projects-masonry">
+            <div class="project-card" data-category="forecasting,economics">
+                <div class="project-header">
+                    <span class="project-type">Time Series Forecasting</span>
+                    <h2 class="project-title">Zimbabwe Inflation Predictor</h2>
+                    <div class="project-metrics">
+                        <div class="metric">📈 <strong>RMSE:</strong> 1.42</div>
+                        <div class="metric">⚡ <strong>Speed:</strong> 0.8s</div>
+                        <div class="metric">🔗 <strong>Live:</strong> Dashboard</div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-tech">
+                        <span class="tech-badge">ARIMA</span>
+                        <span class="tech-badge">LSTM</span>
+                        <span class="tech-badge">Prophet</span>
+                        <span class="tech-badge">Streamlit</span>
+                        <span class="tech-badge">ZIMSTAT</span>
+                    </div>
+                    <div class="project-impact">
+                        <span class="impact-stat">98% Accurate</span>
+                        <span class="impact-stat">Live Trading</span>
+                        <p>Real-time inflation forecasts using Reserve Bank of Zimbabwe data. Powers trading decisions for Gweru businesses.</p>
+                    </div>
+                    <button class="project-cta" onclick="viewProject('Inflation Predictor')">🚀 View Live Dashboard</button>
+                </div>
+            </div>
+
+            <div class="project-card" data-category="gaming,economics">
+                <div class="project-header">
+                    <span class="project-type">Revenue Analytics</span>
+                    <h2 class="project-title">Gweru Gaming Revenue</h2>
+                    <div class="project-metrics">
+                        <div class="metric">💰 <strong>R²:</strong> 0.94</div>
+                        <div class="metric">🎮 <strong>PS5:</strong> Optimized</div>
+                        <div class="metric">📱 <strong>Mobile:</strong> Responsive</div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-tech">
+                        <span class="tech-badge">XGBoost</span>
+                        <span class="tech-badge">Tableau</span>
+                        <span class="tech-badge">SQL</span>
+                        <span class="tech-badge">Power BI</span>
+                    </div>
+                    <div class="project-impact">
+                        <span class="impact-stat">+47% Revenue</span>
+                        <span class="impact-stat">15 Cafes</span>
+                        <p>Predicted peak gaming hours for Gweru cafes. PS5 allocation optimization increased revenue by 47%.</p>
+                    </div>
+                    <button class="project-cta" onclick="viewProject('Gaming Revenue')">📊 Explore Analytics</button>
+                </div>
+            </div>
+
+            <div class="project-card" data-category="classification">
+                <div class="project-header">
+                    <span class="project-type">Customer Analytics</span>
+                    <h2 class="project-title">MSU Student Segmentation</h2>
+                    <div class="project-metrics">
+                        <div class="metric">🎯 <strong>F1:</strong> 0.92</div>
+                        <div class="metric">👥 <strong>Clusters:</strong> 7</div>
+                        <div class="metric">📧 <strong>ROI:</strong> 320%</div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-tech">
+                        <span class="tech-badge">K-Means</span>
+                        <span class="tech-badge">Random Forest</span>
+                        <span class="tech-badge">SHAP</span>
+                        <span class="tech-badge">FastAPI</span>
+                    </div>
+                    <div class="project-impact">
+                        <span class="impact-stat">7 Segments</span>
+                        <span class="impact-stat">MSU Marketing</span>
+                        <p>Identified 7 student personas for targeted marketing. Increased MSU program enrollment by 23%.</p>
+                    </div>
+                    <button class="project-cta" onclick="viewProject('Student Segmentation')">🔍 View Insights</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PROJECT FILTERING
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                document.querySelectorAll('.project-card').forEach((card, index) => {
+                    if (filter === 'all' || card.dataset.category.includes(filter)) {
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    } else {
+                        card.style.opacity = '0.2';
+                        card.style.transform = 'translateY(30px)';
+                    }
+                });
+            });
+        });
+        
+        function viewProject(projectName) {
+            const btn = event.target;
+            const originalText = btn.textContent;
+            
+            btn.innerHTML = '🚀 Loading...';
+            btn.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                btn.innerHTML = '✅ <strong>LIVE DEMO</strong>';
+                btn.style.background = 'linear-gradient(45deg, #10B981, #34D399)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                    btn.style.transform = '';
+                }, 3000);
+                
+                // Open GitHub/Streamlit demo
+                window.open(`https://github.com/MSU-DataScience/${projectName.replace(' ', '-')}`, '_blank');
+            }, 1500);
+        }
+        
+        // MASONRY REFLOW ANIMATION
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('.project-card').forEach((card, i) => {
+                card.style.transition = 'none';
+                setTimeout(() => card.style.transition = 'all 0.6s ease', 50);
+            });
+        });
+    </script>
+</body>
+</html>

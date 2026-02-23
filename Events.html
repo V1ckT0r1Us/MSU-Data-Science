@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🎓 MSU Data Science Club - Events 🎯</title>
+    <style>
+        :root {
+            --msu-blue: #98E6EE;
+            --msu-gold: #D7BD19;
+            --msu-dark: #1a365d;
+            --data-purple: #7C3AED;
+            --data-green: #10B981;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--msu-blue) 0%, #e0f7fa 50%, #f3f4f6 100%);
+            color: var(--msu-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* FIXED HEADER */
+        header {
+            background: linear-gradient(135deg, var(--msu-blue), var(--msu-gold));
+            color: var(--msu-dark);
+            padding: 15px 20px;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1001;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        header h1 { font-size: 1.8em; margin: 0; font-weight: 700; }
+        header p { font-size: 0.9em; margin: 0; opacity: 0.9; }
+        
+        /* EVENT PAGE NAV */
+        .main-nav {
+            background: rgba(255,255,255,0.95);
+            padding: 12px 0;
+            position: sticky;
+            top: 80px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .main-nav a {
+            display: inline-block;
+            margin: 0 8px;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, var(--data-purple), var(--data-green));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(124,58,237,0.3);
+        }
+        .main-nav a:hover, .main-nav a.active {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(124,58,237,0.5);
+        }
+        
+        /* MAIN CONTENT */
+        .page-container {
+            margin-top: 120px;
+            padding: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* EVENT HERO */
+        .event-hero {
+            background: linear-gradient(135deg, var(--data-purple), var(--data-green));
+            color: white;
+            padding: 80px 40px;
+            text-align: center;
+            border-radius: 25px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .event-hero::before {
+            content: '📊✨';
+            position: absolute;
+            font-size: 10em;
+            top: -50px;
+            right: -50px;
+            opacity: 0.1;
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .event-hero h1 {
+            font-size: clamp(2.5em, 6vw, 4em);
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+        .event-hero p {
+            font-size: 1.4em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* EVENT FILTERS */
+        .event-filters {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: white;
+            color: var(--data-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        /* EVENT GRID */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        /* EVENT CARD UPGRADE */
+        .event-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border-top: 5px solid var(--data-green);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--msu-gold), var(--data-purple), var(--data-green));
+            transform: translateX(-100%);
+            transition: transform 0.8s ease;
+        }
+        .event-card:hover::before {
+            transform: translateX(100%);
+        }
+        .event-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(16,185,129,0.3);
+        }
+        
+        .event-badge {
+            display: inline-block;
+            background: var(--data-green);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+        }
+        
+        .event-date-time {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--data-purple);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .event-title {
+            font-size: 2.2em;
+            font-weight: 800;
+            color: var(--msu-dark);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .event-details {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+        
+        .event-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .spots-left {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+        
+        .rsvp-btn {
+            width: 100%;
+            background: linear-gradient(45deg, var(--data-green), #059669);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.4em;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(16,185,129,0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .rsvp-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(16,185,129,0.6);
+        }
+        
+        /* COUNTDOWN */
+        .countdown {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        .countdown-item {
+            background: rgba(255,255,255,0.9);
+            padding: 20px 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-width: 100px;
+        }
+        .countdown-number {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--data-purple);
+            display: block;
+        }
+        .countdown-label {
+            font-size: 0.9em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .page-container { padding: 20px; margin-top: 110px; }
+            .main-nav a { display: block; margin: 6px 0; }
+            .events-grid { grid-template-columns: 1fr; }
+            .event-hero { padding: 60px 20px; }
+            .countdown { gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📊 MSU Data Science Club</h1>
+        <p>Midlands State University Gweru | Live Events 🚀</p>
+    </header>
+
+    <nav class="main-nav">
+        <a href="Events.html" onclick="showPage('events')" class="active">📅 All Events</a>
+        <a href="Workshops.html" onclick="showPage('workshops')">💻 Workshops</a>
+        <a href="Home.html" onclick="showPage('home')">🏠 Home</a>
+        <a href="Projects.html" onclick="showPage('projects')">📈 Projects</a>
+    </nav>
+
+    <div class="page-container">
+        <div class="event-hero">
+            <h1>Live Data Science Events</h1>
+            <p>Hands-on workshops • Industry speakers • Real datasets • Career networking</p>
+        </div>
+
+        <!-- EVENT FILTERS -->
+        <div class="event-filters">
+            <button class="filter-btn active" data-filter="all">All Events</button>
+            <button class="filter-btn" data-filter="workshop">Workshops</button>
+            <button class="filter-btn" data-filter="hackathon">Hackathons</button>
+            <button class="filter-btn" data-filter="networking">Networking</button>
+        </div>
+
+        <!-- EVENTS GRID -->
+        <div class="events-grid">
+            <div class="event-card" data-category="workshop">
+                <span class="event-badge">Python Bootcamp</span>
+                <div class="event-date-time">
+                    <strong>📅 March 8th</strong> • <strong>5:00 PM</strong>
+                </div>
+                <h2 class="event-title">🚀 Python for Data Science Bootcamp</h2>
+                <div class="event-details">
+                    Master Pandas, NumPy, Matplotlib • Build live dashboards • Pizza included!
+                </div>
+                <div class="event-meta">
+                    <div>📍 MSU Computer Lab 204</div>
+                    <div class="spots-left">25/40 Spots</div>
+                </div>
+                <button class="rsvp-btn" onclick="rsvp('Python Bootcamp')">🎉 Secure Spot</button>
+            </div>
+
+            <div class="event-card" data-category="workshop">
+                <span class="event-badge">Machine Learning</span>
+                <div class="event-date-time">
+                    <strong>📅 March 15th</strong> • <strong>6:00 PM</strong>
+                </div>
+                <h2 class="event-title">🔮 ML Crash Course</h2>
+                <div class="event-details">
+                    Scikit-learn • Classification • Neural Networks intro • Live model training
+                </div>
+                <div class="event-meta">
+                    <div>📍 MSU Data Science Lab</div>
+                    <div class="spots-left">18/30 Spots</div>
+                </div>
+                <button class="rsvp-btn" onclick="rsvp('ML Crash Course')">🎯 Register Now</button>
+            </div>
+
+            <div class="event-card" data-category="networking">
+                <span class="event-badge">Gaming Night</span>
+                <div class="event-date-time">
+                    <strong>📅 March 22nd</strong> • <strong>7:00 PM</strong>
+                </div>
+                <h2 class="event-title">🎮 Data Science Gaming Night</h2>
+                <div class="event-details">
+                    PS5 tournaments • Data viz challenges • Multi-screen leaderboards • Energy drinks!
+                </div>
+                <div class="event-meta">
+                    <div>📍 Gweru Gaming Cafe</div>
+                    <div class="spots-left">22/35 Spots</div>
+                </div>
+                <button class="rsvp-btn" onclick="rsvp('Gaming Night')">🎮 Join Battle</button>
+            </div>
+        </div>
+
+        <!-- COUNTDOWN TO NEXT EVENT -->
+        <div class="countdown">
+            <div class="countdown-item">
+                <span class="countdown-number" id="days">12</span>
+                <div class="countdown-label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="hours">08</span>
+                <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="minutes">45</span>
+                <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-number" id="seconds">30</span>
+                <div class="countdown-label">Seconds</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // EVENT FILTERING
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                document.querySelectorAll('.event-card').forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.transform = 'translateY(0)';
+                        card.style.opacity = '1';
+                    } else {
+                        card.style.transform = 'translateY(50px)';
+                        card.style.opacity = '0';
+                    }
+                });
+            });
+        });
+        
+        // COUNTDOWN TIMER
+        function updateCountdown() {
+            const now = new Date();
+            const nextEvent = new Date('March 8, 2026 17:00:00');
+            const diff = nextEvent - now;
+            
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        function rsvp(eventName) {
+            const btn = event.target;
+            btn.textContent = '🎉 Securing...';
+            btn.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                btn.textContent = '✅ SPOT SECURED!';
+                btn.style.background = 'linear-gradient(45deg, #10B981, #34D399)';
+                alert(`🎉 SUCCESS! You're registered for "${eventName}"!\n\nCheck WhatsApp for confirmation + materials! 🚀`);
+                
+                setTimeout(() => {
+                    btn.textContent = '🎉 Secure Spot';
+                    btn.style.background = '';
+                    btn.style.transform = '';
+                }, 2000);
+            }, 1500);
+        }
+        
+        // SMOOTH SCROLL
+        window.addEventListener('scroll', () => {
+            document.querySelector('.event-hero').style.transform = 
+                `translateY(${window.scrollY * 0.5}px)`;
+        });
+    </script>
+</body>
+</html>
